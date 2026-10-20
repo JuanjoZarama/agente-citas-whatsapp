@@ -16,10 +16,6 @@ Cliente:  🎤 (nota de voz) "¿Qué citas tengo?"
 Agente:   Tienes una *consulta general* programada para el *martes 20 de octubre a las 5:00 p. m.*
 ```
 
-<!-- Agrega una captura en docs/demo.png y descomenta la línea:
-![Conversación de ejemplo](docs/demo.png)
--->
-
 ## Qué hace
 
 - **Agenda en lenguaje natural:** entiende "mañana en la tarde" o "el viernes", ofrece solo horarios realmente libres y confirma antes de crear la cita.
