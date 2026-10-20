@@ -1,0 +1,77 @@
+# Modo local: n8n + Postgres en tu PC (WSL o máquina virtual Ubuntu) y un túnel
+# gratuito de ngrok para que Meta pueda enviar los mensajes de WhatsApp.
+# El editor de n8n solo se abre en http://localhost:5678; por el túnel solo pasan los webhooks.
+# instalar-local.sh pone COMPOSE_FILE=docker-compose.local.yml en .env, así que
+# "docker compose" usa este archivo sin tener que indicarlo.
+name: agente-citas
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: n8n
+      TZ: ${ZONA_HORARIA}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d n8n"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  n8n:
+    image: n8nio/n8n:${N8N_VERSION}
+    restart: unless-stopped
+    ports:
+      # 127.0.0.1 = solo este equipo. En VirtualBox usa EDITOR_BIND=0.0.0.0 en .env.
+      - "${EDITOR_BIND:-127.0.0.1}:5678:5678"
+    environment:
+      N8N_HOST: localhost
+      N8N_PORT: "5678"
+      N8N_PROTOCOL: http
+      N8N_EDITOR_BASE_URL: http://localhost:5678/
+      N8N_WEBHOOK_URL: https://${NGROK_DOMAIN}/
+      N8N_PROXY_HOPS: "1"
+      N8N_SECURE_COOKIE: "false"
+      NODE_ENV: production
+      GENERIC_TIMEZONE: ${ZONA_HORARIA}
+      TZ: ${ZONA_HORARIA}
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_RESTRICT_FILE_ACCESS_TO: /files
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: "5432"
+      DB_POSTGRESDB_DATABASE: n8n
+      DB_POSTGRESDB_USER: ${POSTGRES_USER}
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
+      EXECUTIONS_DATA_PRUNE: "true"
+      EXECUTIONS_DATA_MAX_AGE: "336"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ngrok:
+    image: ngrok/ngrok:3.39.11-alpine
+    restart: unless-stopped
+    command:
+      - http
+      - n8n:5678
+      - --url=https://${NGROK_DOMAIN}
+      - --traffic-policy-file=/etc/ngrok/politica.yml
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    volumes:
+      - ./ngrok-politica.yml:/etc/ngrok/politica.yml:ro
+    depends_on:
+      - n8n
+
+volumes:
+  postgres_data:
+  n8n_data:

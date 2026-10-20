@@ -1,0 +1,12 @@
+# Caddy obtiene y renueva solo el certificado HTTPS de Let's Encrypt.
+{
+	email {$CORREO_SSL}
+}
+
+{$DOMINIO} {
+	encode gzip
+	reverse_proxy n8n:5678 {
+		# Envía de inmediato los eventos en vivo del editor de n8n.
+		flush_interval -1
+	}
+}

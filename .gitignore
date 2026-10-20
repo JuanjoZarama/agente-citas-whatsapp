@@ -1,0 +1,12 @@
+# Claves y datos: nunca al repositorio
+configuracion.json
+.env
+.env.*
+*.dump
+respaldos/
+
+# Desarrollo
+node_modules/
+desarrollo/package-lock.json
+*.zip
+.DS_Store

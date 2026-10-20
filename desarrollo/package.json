@@ -1,0 +1,12 @@
+{
+  "name": "agente-citas-desarrollo",
+  "private": true,
+  "description": "Generador y pruebas del workflow de n8n del agente de citas",
+  "scripts": {
+    "build": "node build.js ../workflow/agente-citas-whatsapp.json gemini && node build.js ../workflow/agente-citas-whatsapp-openai.json openai",
+    "test": "node test.js"
+  },
+  "devDependencies": {
+    "luxon": "^3.7.2"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_instrucciones": "Copia este archivo como configuracion.json, llena los valores y ejecuta: sudo bash importar.sh. Contiene claves: no lo compartas ni lo subas a GitHub.",
+  "negocio": {
+    "negocio": "Mi Negocio",
+    "asistente": "Sofía",
+    "servicios": "Consulta general (60 min); Valoración (60 min)",
+    "direccion": "Calle 00 # 00-00, Pasto",
+    "info_extra": "Pagos en efectivo o transferencia. Para cancelar, avisar con 2 horas de anticipación.",
+    "politica_datos_url": "https://tu-sitio.com/politica-de-datos",
+    "zona_horaria": "America/Bogota",
+    "_ayuda_horario": "1 = lunes ... 7 = domingo. Cada rango va como HH:MM-HH:MM. Lista vacía = cerrado.",
+    "horario": {
+      "1": ["08:00-12:00", "14:00-18:00"],
+      "2": ["08:00-12:00", "14:00-18:00"],
+      "3": ["08:00-12:00", "14:00-18:00"],
+      "4": ["08:00-12:00", "14:00-18:00"],
+      "5": ["08:00-12:00", "14:00-18:00"],
+      "6": ["08:00-12:00"],
+      "7": []
+    },
+    "duracion_min": 60,
+    "intervalo_min": 60,
+    "anticipacion_min": 120,
+    "dias_max": 30,
+    "max_citas_activas": 3,
+    "cerrar_festivos": true,
+    "hora_recordatorio": 18
+  },
+  "whatsapp": {
+    "_ayuda": "Todo sale del panel de la app en developers.facebook.com y de Configuración del negocio (usuario del sistema).",
+    "token_permanente": "",
+    "waba_id": "",
+    "phone_number_id": "",
+    "app_id": "",
+    "app_secret": ""
+  },
+  "google": {
+    "_ayuda": "Client ID y secret del cliente OAuth web. calendar_id: 'primary' o el ID del calendario de citas.",
+    "client_id": "",
+    "client_secret": "",
+    "calendar_id": "primary"
+  },
+  "ia": {
+    "_ayuda": "proveedor: gemini (gratis con límites, clave en aistudio.google.com/apikey) u openai (de pago, clave sk-...). Solo llena la clave del proveedor elegido.",
+    "proveedor": "gemini",
+    "gemini_api_key": "",
+    "openai_api_key": ""
+  }
+}

@@ -1,0 +1,10 @@
+# Por el túnel público solo pasan los webhooks de n8n (rutas /webhook...).
+# Cualquier otra ruta, incluido el editor, responde 404 sin llegar a n8n.
+on_http_request:
+  - expressions:
+      - "!req.url.path.startsWith('/webhook')"
+    actions:
+      - type: custom-response
+        config:
+          status_code: 404
+          body: "No encontrado"
